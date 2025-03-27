@@ -16,3 +16,7 @@ variable "name" {
   description = "default name for all resources"
   default = "prisma"
 }
+
+variable "environment" {
+  description = "Environment name"
+}

@@ -5,6 +5,7 @@ module "us_east_1" {
   }
   vpc_cidr = "10.66.108.0/22"
   tags = var.resource_tags
+  environment = "poc"
 }
 
 module "us_east_2" {
@@ -14,6 +15,7 @@ module "us_east_2" {
   }
   vpc_cidr = "10.18.92.0/22"
   tags = var.resource_tags
+  environment = "poc"
 }
 
 module "us_west_1" {
@@ -23,6 +25,7 @@ module "us_west_1" {
   }
   vpc_cidr = "10.66.112.0/22"
   tags = var.resource_tags
+  environment = "poc"
 }
 
 module "us_west_2" {
@@ -32,4 +35,5 @@ module "us_west_2" {
   }
   vpc_cidr = "10.66.116.0/22"
   tags = var.resource_tags
+  environment = "poc"
 }

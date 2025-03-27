@@ -12,7 +12,8 @@ data "aws_region" "current" {}
 resource "aws_vpc" "prisma_vpc" {
   cidr_block = var.vpc_cidr
   tags = merge(var.tags, {
-    Name = "${var.name}-vpc-${data.aws_region.current.name}"
+    Name = "${var.name}-vpc-${data.aws_region.current.name}",
+    Environment = "${var.environment}"
   })
 }
 
@@ -22,7 +23,8 @@ resource "aws_subnet" "public_subnet" {
   availability_zone       = data.aws_availability_zones.available.names[0]
   map_public_ip_on_launch = true
   tags = merge(var.tags, {
-    Name = "${var.name}-public-subnet-${data.aws_region.current.name}"
+    Name = "${var.name}-public-subnet-${data.aws_region.current.name}",
+    Environment = "${var.environment}"
   })
 }
 
@@ -31,7 +33,8 @@ resource "aws_subnet" "private_subnet" {
   cidr_block        = cidrsubnet(var.vpc_cidr, 2, 2)
   availability_zone = data.aws_availability_zones.available.names[0]
   tags = merge(var.tags, {
-    Name = "${var.name}-private-subnet-${data.aws_region.current.name}"
+    Name = "${var.name}-private-subnet-${data.aws_region.current.name}",
+    Environment = "${var.environment}"
   })
 }
 
@@ -48,21 +51,24 @@ resource "aws_security_group" "https_sg" {
   }
 
   tags = merge(var.tags, {
-    Name = "${var.name}-https-sg"
+    Name = "${var.name}-https-sg",
+    Environment = "${var.environment}"
   })
 }
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.prisma_vpc.id
   tags = merge(var.tags, {
-    Name = "${var.name}-igw"
+    Name = "${var.name}-igw",
+    Environment = "${var.environment}"
   })
 }
 
 resource "aws_eip" "nat_eip" {
   domain = "vpc"
   tags = merge(var.tags, {
-    Name = "${var.name}-nat-eip"
+    Name = "${var.name}-nat-eip",
+    Environment = "${var.environment}"
   })
 }
 
@@ -70,7 +76,8 @@ resource "aws_nat_gateway" "nat_gw" {
   allocation_id = aws_eip.nat_eip.id
   subnet_id     = aws_subnet.public_subnet.id
   tags = merge(var.tags, {
-    Name = "${var.name}-nat-gw"
+    Name = "${var.name}-nat-gw",
+    Environment = "${var.environment}"
   })
   depends_on = [aws_internet_gateway.igw]
 }
@@ -84,7 +91,8 @@ resource "aws_route_table" "public_rt" {
   }
 
   tags = merge(var.tags, {
-    Name = "${var.name}-public-rt"
+    Name = "${var.name}-public-rt",
+    Environment = "${var.environment}"
   })
 }
 
@@ -102,7 +110,8 @@ resource "aws_route_table" "private_rt" {
   }
 
   tags = merge(var.tags, {
-    Name = "${var.name}-private-rt"
+    Name = "${var.name}-private-rt",
+    Environment = "${var.environment}"
   })
 }
 
@@ -117,6 +126,7 @@ resource "aws_vpc_endpoint" "s3" {
   vpc_endpoint_type = "Gateway"
   route_table_ids   = [aws_route_table.private_rt.id]
   tags = merge(var.tags, {
-    Name = "${var.name}-s3-vpc-endpoint"
+    Name = "${var.name}-s3-vpc-endpoint",
+    Environment = "${var.environment}"
   })
 }
