@@ -8,3 +8,7 @@ variable "resource_tags" {
     ManagedBy   = "Terraform"
   }
 }
+
+variable "environment" {
+  description = "Environment name"
+}
